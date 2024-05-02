@@ -1,6 +1,14 @@
 package carrito.mx;
 
-public class Catalogo {
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.List;
+
+public class Catalogo implements Serializable{
     //Atributos:
     private String nombre;
     private int cantidad;
@@ -134,6 +142,22 @@ public class Catalogo {
     }
     
     
-    
+    public static void serializarObjetos(List<Catalogo> objetos) {//Método para serialziar los objetos del ArrayList que recibe como parámetro
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("objetos.ser"))) {
+            outputStream.writeObject(objetos);
+            System.out.println("Array de objetos serializado correctamente.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<Catalogo> deserializarObjetos() {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("objetos.ser"))) {
+            return (List<Catalogo>) inputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     
 }

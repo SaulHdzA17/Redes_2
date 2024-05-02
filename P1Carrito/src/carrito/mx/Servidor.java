@@ -13,7 +13,6 @@ public class Servidor {
         Catalogo producto = new Catalogo();
         ArrayList <Catalogo> catalogo = new ArrayList();
         
-        
         try {
             
             System.out.println("*****Iniciando servidor*****");
@@ -41,8 +40,10 @@ public class Servidor {
                 for(String atri: atributos){
                     
                     catalogo.add(producto.obtnerAtributos(atri));
+                    System.out.println(catalogo);
                     
                 }
+                
                 
                 
                 pw.close();//Cerramos el objeto pw.
@@ -72,11 +73,10 @@ public class Servidor {
         } else {
             System.out.println("El archivo no existe.");
         }
-        
-        //Guardado
-        //ArrayList <String> arg = guardarElementos(ruta);
+
         return arg;
          
     }
+    
     
 }
