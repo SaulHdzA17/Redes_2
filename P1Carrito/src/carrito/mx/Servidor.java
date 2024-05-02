@@ -10,6 +10,9 @@ public class Servidor {
         
         String scan = new String();
         Scanner sc = new Scanner(System.in);
+        Catalogo producto = new Catalogo();
+        ArrayList <Catalogo> catalogo = new ArrayList();
+        
         
         try {
             
@@ -32,8 +35,16 @@ public class Servidor {
                 pw.flush();//en la consola del Cliente, limpiamos el flujo.
 
                 String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
-                serializarArchivo(rutaArchivo);
-               
+                ArrayList <String> atributos = obtenerContenidoTxt(rutaArchivo);
+                
+
+                for(String atri: atributos){
+                    
+                    catalogo.add(producto.obtnerAtributos(atri));
+                    
+                }
+                
+                
                 pw.close();//Cerramos el objeto pw.
                 cl.close();//Cerramos el socket del Cliente creado previamentex
             }//Cerramos bucle for
@@ -42,14 +53,16 @@ public class Servidor {
         }
     }
     
-    public static void serializarArchivo(String ruta) {//Método para verificar que el archivo que contiene el catalogo de productos existe y se 
-        File archivo = new File(ruta);
-        if (archivo.exists()) {
+    public static ArrayList <String> obtenerContenidoTxt(String ruta) {//Con este método obtenemos el contenido del txt y guardamos línea por línea
+        File archivo = new File(ruta);//el contenido en un elemento de
+        ArrayList <String> arg = new ArrayList();
+        if (archivo.exists()) {//devuelve 
             StringBuilder content = new StringBuilder();
             try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     content.append(line).append("\n");
+                    arg.add(line);
                 }
                 System.out.println("Contenido del archivo:");
                 System.out.println(content.toString());
@@ -60,35 +73,10 @@ public class Servidor {
             System.out.println("El archivo no existe.");
         }
         
-        
         //Guardado
-        ArrayList <String> arg = guardarElementos(ruta);
+        //ArrayList <String> arg = guardarElementos(ruta);
+        return arg;
          
     }
     
-    public static ArrayList<String> guardarElementos(String filePath) {
-        ArrayList<String> fileLines = new ArrayList<>();
-        File file = new File(filePath);
-        
-        if (file.exists()) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    fileLines.add(line);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("El archivo no existe.");
-            return null;
-        }
-        
-        if (fileLines.isEmpty()) {
-            System.out.println("El archivo está vacío.");
-            return null;
-        }
-        
-        return fileLines;
-    }
 }
