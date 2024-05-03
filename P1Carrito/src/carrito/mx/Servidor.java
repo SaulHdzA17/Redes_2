@@ -2,7 +2,6 @@ package carrito.mx;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class Servidor {
@@ -36,25 +35,23 @@ public class Servidor {
                 //String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
                 String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
                 ArrayList <String> atributos = obtenerContenidoTxt(rutaArchivo);
-                
+               
                 for(int x = 0; x < atributos.size(); x++){
                     
-                    System.out.println(atributos.get(x));
-                    producto = producto.obtnerAtributos(atributos.get(x));
-                    producto.imprimirAtributos(producto);
+                    //Apasamos toda la información del documento un objeto
+
+                    //System.out.println(atributos.get(x));
+                    producto = Catalogo.obtnerAtributos(atributos.get(x));
+                    //Catalogo.imprimirAtributos(producto);
                     catalogo.add(producto);
 
                 }
-                
-                /*for( int x = 0; x < catalogo.size(); x++ ){
-                    
-                    System.out.println("Nombre: " + catalogo.get(x).getNombre() + 
-                                     "\nCantidad: " + catalogo.get(x).getCantidad() + 
-                                     "\nPrecio: $" + catalogo.get(x).getPrecio() );
 
-                }*/
+                for( Catalogo obj: catalogo ){
 
-                
+                    Catalogo.imprimirAtributos(obj);
+
+                }
                 
                 pw.close();//Cerramos el objeto pw.
                 cl.close();//Cerramos el socket del Cliente creado previamentex

@@ -23,7 +23,7 @@ public class Catalogo implements Serializable{
 
         this.nombre = name;
         this.cantidad = can;
-        this.precio =pre;
+        this.precio = pre;
 
     }
 
@@ -52,13 +52,15 @@ public class Catalogo implements Serializable{
     }
     
     //Método para ir reconociendo los elementos del archivo y obtenernlos como atributos del objeto:
-    public Catalogo obtnerAtributos(String cadenaArchivo) {
-        Catalogo cat1 = new Catalogo();
+    public static Catalogo obtnerAtributos(String cadenaArchivo) {
+        
+        String nombre = "";
+        int catidad = 0;
+        double precio = 0;
         char c;
         int estado  = 0;
         String lexema = "";
-        
-        
+                
         for(int i = 0; i < cadenaArchivo.length(); i++){
 
             c = cadenaArchivo.charAt(i);
@@ -86,14 +88,14 @@ public class Catalogo implements Serializable{
                 
                 case 1:                    
                     //Cuando es una letra
-                    if(Character.isLetter(c) || c == ' ' ){
+                    if(Character.isLetterOrDigit(c) || c == ' ' ){
                         
                         estado = 1;
                         lexema += c;
                     
                     }else if( (c == ',') || (c == '\n') || (i == (cadenaArchivo.length())) ){
                     
-                        this.setNombre(lexema);
+                        nombre = lexema;
                         //System.out.println(lexema + " " + estado);
                         lexema = "";
                         estado = 0;                       
@@ -117,7 +119,7 @@ public class Catalogo implements Serializable{
                     }else if( (c == ',') || (c == '\n') || (i == (cadenaArchivo.length())) ){
                     
                         //Termina de leer un atributo
-                        this.setCantidad(Integer.parseInt(lexema));
+                        catidad = Integer.parseInt(lexema);
                         //System.out.println(lexema + " " + estado);
                         estado = 0;
                         lexema = "";
@@ -139,7 +141,7 @@ public class Catalogo implements Serializable{
                     }else{
                     
                         //Termina de leer un atributo
-                        this.setPrecio(Double.parseDouble(lexema));
+                        precio = Double.parseDouble(lexema);
                         //System.out.println(lexema + " " + estado + "++++++++++++++++++++");
                         estado = 0;
                         lexema = "";
@@ -155,8 +157,7 @@ public class Catalogo implements Serializable{
             
         }
 
-        cat1.imprimirAtributos(cat1);
-        return cat1;
+        return new Catalogo(nombre, catidad, precio);
     }
     
     public static void imprimirAtributos (Catalogo obj){
