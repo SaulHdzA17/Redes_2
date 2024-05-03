@@ -19,6 +19,14 @@ public class Catalogo implements Serializable{
         
     }
 
+    public Catalogo( String name, int can, double pre ) {
+
+        this.nombre = name;
+        this.cantidad = can;
+        this.precio =pre;
+
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -51,9 +59,12 @@ public class Catalogo implements Serializable{
         String lexema = "";
         
         
-        for(int i = 0; i<cadenaArchivo.length(); i++){
+        for(int i = 0; i < cadenaArchivo.length(); i++){
+
             c = cadenaArchivo.charAt(i);
+            
             switch (estado) {
+                
                 case 0:
                     //Detecta si es una letra o un digito
                     if(Character.isLetter(c)){
@@ -75,14 +86,15 @@ public class Catalogo implements Serializable{
                 
                 case 1:                    
                     //Cuando es una letra
-                    if(Character.isLetter(c)){
+                    if(Character.isLetter(c) || c == ' ' ){
                         
                         estado = 1;
                         lexema += c;
                     
-                    }else if( (c == ',') || (c == '\n') || (i == (cadenaArchivo.length() - 1)) ){
+                    }else if( (c == ',') || (c == '\n') || (i == (cadenaArchivo.length())) ){
                     
-                        this.setNombre(nombre);
+                        this.setNombre(lexema);
+                        //System.out.println(lexema + " " + estado);
                         lexema = "";
                         estado = 0;                       
                     }                        
@@ -102,10 +114,11 @@ public class Catalogo implements Serializable{
                         estado = 3;
                         lexema += c;
                     
-                    }else if( (c == ',') || (c == '\n') || (i == (cadenaArchivo.length() - 1)) ){
+                    }else if( (c == ',') || (c == '\n') || (i == (cadenaArchivo.length())) ){
                     
                         //Termina de leer un atributo
                         this.setCantidad(Integer.parseInt(lexema));
+                        //System.out.println(lexema + " " + estado);
                         estado = 0;
                         lexema = "";
                         
@@ -121,11 +134,13 @@ public class Catalogo implements Serializable{
                         
                         estado = 3;
                         lexema += c;
-                    
-                    }else if( (c == ',') || (c == '\n') || (i == (cadenaArchivo.length() - 1)) ){
+                        //System.out.println(lexema + " " + estado);
+                                            
+                    }else{
                     
                         //Termina de leer un atributo
                         this.setPrecio(Double.parseDouble(lexema));
+                        //System.out.println(lexema + " " + estado + "++++++++++++++++++++");
                         estado = 0;
                         lexema = "";
                         
@@ -133,14 +148,25 @@ public class Catalogo implements Serializable{
                     
                 break;
                 
-            default:
+                default:
                 throw new AssertionError();
+            }
+
+            
         }
-        }
-        
+
+        cat1.imprimirAtributos(cat1);
         return cat1;
     }
     
+    public static void imprimirAtributos (Catalogo obj){
+
+        System.out.println("Nombre: " + obj.getNombre() + 
+                            "\nCantidad: " + obj.getCantidad() + 
+                            "\nPrecio: $" + obj.getPrecio() );
+
+    }
+
     
     public static void serializarObjetos(List<Catalogo> objetos) {//Método para serialziar los objetos del ArrayList que recibe como parámetro
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("objetos.ser"))) {

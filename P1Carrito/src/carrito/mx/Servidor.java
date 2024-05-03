@@ -33,17 +33,27 @@ public class Servidor {
                 pw.println(mensaje);//en este caso lo vamos a ligar al mensaje que escribimos en el Servidor para enviarlo y mostrarlo 
                 pw.flush();//en la consola del Cliente, limpiamos el flujo.
 
-                String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
+                //String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
+                String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
                 ArrayList <String> atributos = obtenerContenidoTxt(rutaArchivo);
                 
+                for(int x = 0; x < atributos.size(); x++){
+                    
+                    System.out.println(atributos.get(x));
+                    producto = producto.obtnerAtributos(atributos.get(x));
+                    producto.imprimirAtributos(producto);
+                    catalogo.add(producto);
 
-                for(String atri: atributos){
-                    
-                    catalogo.add(producto.obtnerAtributos(atri));
-                    System.out.println(catalogo);
-                    
                 }
                 
+                /*for( int x = 0; x < catalogo.size(); x++ ){
+                    
+                    System.out.println("Nombre: " + catalogo.get(x).getNombre() + 
+                                     "\nCantidad: " + catalogo.get(x).getCantidad() + 
+                                     "\nPrecio: $" + catalogo.get(x).getPrecio() );
+
+                }*/
+
                 
                 
                 pw.close();//Cerramos el objeto pw.
@@ -65,8 +75,8 @@ public class Servidor {
                     content.append(line).append("\n");
                     arg.add(line);
                 }
-                System.out.println("Contenido del archivo:");
-                System.out.println(content.toString());
+                //System.out.println("Contenido del archivo:");
+                //System.out.println(content.toString());
             } catch (IOException e) {
                 e.printStackTrace();
             }
