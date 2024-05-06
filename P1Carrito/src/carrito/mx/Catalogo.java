@@ -1,12 +1,7 @@
 package carrito.mx;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 public class Catalogo implements Serializable{
     //Atributos:
@@ -169,18 +164,22 @@ public class Catalogo implements Serializable{
     }
 
     
-    public static void serializarObjetos(List<Catalogo> objetos) {//Método para serialziar los objetos del ArrayList que recibe como parámetro
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("objetos.ser"))) {
-            outputStream.writeObject(objetos);
-            System.out.println("Array de objetos serializado correctamente.");
+    public static byte[] serializarLista(ArrayList<Catalogo> lista) {
+        try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+             ObjectOutputStream outputStream = new ObjectOutputStream(bos)) {
+            outputStream.writeObject(lista);
+            outputStream.flush();
+            return bos.toByteArray();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    public static List<Catalogo> deserializarObjetos() {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("objetos.ser"))) {
-            return (List<Catalogo>) inputStream.readObject();
+    public static ArrayList<Catalogo> deserializarLista(byte[] bytes) {
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+             ObjectInputStream inputStream = new ObjectInputStream(bis)) {
+            return (ArrayList<Catalogo>) inputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

@@ -1,9 +1,13 @@
 package carrito.mx;
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Cliente {
      public static void main(String[] args) {
+        Catalogo producto = new Catalogo();
+        ArrayList <Catalogo> catalogo = new ArrayList();
         try {
             BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));//Creamos un objeto BufferedReader para poder leer 
             //la entrada que nos de el usuario desde la consola, alternativa a scanner.
@@ -18,6 +22,16 @@ public class Cliente {
             String mensaje = br2.readLine();//Leemos el mensaje enviado por el servidor "Hola mundo desde el servidor"
             System.out.println("Recibimos un mensaje desde el servidor :D");//
             System.out.println("Mensaje: " + mensaje);//Imprimimos en la consola el mensaje enviado por el servidor
+            
+           //Catalogo.deserializarObjetos(catalogo);
+            if (catalogo != null) {
+                for (Catalogo objeto : catalogo) {
+                    // Hacer algo con cada objeto deserializado
+                }
+            } else {
+                System.out.println("Error al deserializar los objetos.");
+            }
+
             
             br1.close();
             br2.close();//Cerramos lo BufferedReader
