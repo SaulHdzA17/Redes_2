@@ -53,9 +53,17 @@ public class Servidor {
 
                 }
                 
-                //Catalogo.serializarObjetos(catalogo);
+                //Serializamos el array de objetos tipo catalogo
+                byte [] arg = Catalogo.serializarLista(catalogo);
                 
-                Catalogo.serializarLista(catalogo);
+                
+                // Obtener flujo de salida del socket
+                OutputStream outputStream = cl.getOutputStream();
+
+                // Enviar los datos serializados al cliente
+                outputStream.write(arg);
+                outputStream.flush();
+                
                 
                 pw.close();//Cerramos el objeto pw.
                 cl.close();//Cerramos el socket del Cliente creado previamentex

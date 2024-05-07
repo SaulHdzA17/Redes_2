@@ -166,7 +166,7 @@ public class Catalogo implements Serializable{
     
     public static byte[] serializarLista(ArrayList<Catalogo> lista) {
         try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
-             ObjectOutputStream outputStream = new ObjectOutputStream(bos)) {
+            ObjectOutputStream outputStream = new ObjectOutputStream(bos)) {
             outputStream.writeObject(lista);
             outputStream.flush();
             return bos.toByteArray();

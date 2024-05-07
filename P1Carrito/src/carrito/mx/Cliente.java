@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cliente {
+    
+    
      public static void main(String[] args) {
-        Catalogo producto = new Catalogo();
-        ArrayList <Catalogo> catalogo = new ArrayList();
-        try {
+         
+         ArrayList<Catalogo> listaRecibida;
+         
+         try {
             BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));//Creamos un objeto BufferedReader para poder leer 
             //la entrada que nos de el usuario desde la consola, alternativa a scanner.
             System.out.println("Escriba la direccion del servidor: ");//Proporcionamos la dirección IP o el nombre del servidor, debe ser la 
@@ -16,28 +19,98 @@ public class Cliente {
             System.out.println("Escriba el puerto: ");//Escribimos el puerto al que deseamos ingresar desde la entrada estandar como la entrada
             int pto = Integer.parseInt(br1.readLine());//anterior, en este caso 1234 es el puerto que está escuchando el servidor
             Socket cl = new Socket(host, pto);//Creamos un objeto Socket llamado "cl" que vamos a conectar al servidor especificado por la 
-            //dirección "localhost" y el puerto "1234"
-            BufferedReader br2 = new BufferedReader(new InputStreamReader(cl.getInputStream()));//Creamos un BufferedReader para leer los datos 
-            //que provienen del servidor a través de un flujo de entrada 
-            String mensaje = br2.readLine();//Leemos el mensaje enviado por el servidor "Hola mundo desde el servidor"
-            System.out.println("Recibimos un mensaje desde el servidor :D");//
-            System.out.println("Mensaje: " + mensaje);//Imprimimos en la consola el mensaje enviado por el servidor
             
-           //Catalogo.deserializarObjetos(catalogo);
-            if (catalogo != null) {
-                for (Catalogo objeto : catalogo) {
-                    // Hacer algo con cada objeto deserializado
-                }
-            } else {
-                System.out.println("Error al deserializar los objetos.");
-            }
+            System.out.println("Bienvenido a la tiendita 5 peso");//
+            
+            //Flujo de datos que entra con el array serialziado desde el Servidor:
+            InputStream inputStream = cl.getInputStream();
+            //Leemos lsod atos serializados:
+            byte[] arg = inputStream.readAllBytes();
+            
+            // Deserializar los datos recibidos
+            listaRecibida = Catalogo.deserializarLista(arg);
 
+//            for( Catalogo obj: listaRecibida ){
+//
+//                    obj.imprimirAtributos(obj);
+//
+//            }
             
+
+            int dec = 0;
+
+            do{
+                
+                System.out.println("¿Que desea hacer?");
+                System.out.println("1.-Mostar productos");
+                System.out.println("2.-Ver Carrito de compras");
+                System.out.println("3.-Pagar");
+                System.out.println("4.-Salir");
+                dec = Integer.parseInt(br1.readLine());
+                Cliente.opcionesMenu(dec, listaRecibida);
+                
+            }while(dec != 4);
+            
+
             br1.close();
-            br2.close();//Cerramos lo BufferedReader
             cl.close();//Cerramos el socket cliente
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
+     
+     
+    private static void opcionesMenu( int dec, ArrayList<Catalogo> listaRecibida ){
+        
+        switch(dec){
+        
+            case 1:
+                
+                //Mostar 
+                Cliente.mostrarProducto(listaRecibida);
+                
+            break;
+
+            
+            case 2:
+                
+                //Ver carrito
+                
+            break;
+
+            
+            case 3:
+                
+                //Pagar
+                
+            break;
+
+            
+            case 4:
+                
+                //Salir
+                
+            break;
+
+            
+            default:
+                
+                //Opcion no valida
+                
+            break;
+        
+        }
+        
+    }
+    
+    private static void mostrarProducto( ArrayList<Catalogo> listaRecibida ){
+        
+        for( Catalogo obj: listaRecibida ){
+            
+            obj.imprimirAtributos(obj);
+
+        }
+        
+    }
+    
 }
