@@ -46,12 +46,12 @@ public class Servidor {
                     catalogo.add(producto);
 
                 }
-
-                for( Catalogo obj: catalogo ){
-
-                    Catalogo.imprimirAtributos(obj);
-
-                }
+//
+//                for( Catalogo obj: catalogo ){
+//
+//                    Catalogo.imprimirAtributos(obj);
+//
+//                }
                 
                 //Serializamos el array de objetos tipo catalogo
                 byte [] arg = Catalogo.serializarLista(catalogo);
