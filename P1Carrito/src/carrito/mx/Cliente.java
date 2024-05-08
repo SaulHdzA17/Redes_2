@@ -3,6 +3,7 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Cliente {
     
@@ -62,12 +63,24 @@ public class Cliente {
      
     private static void opcionesMenu( int dec, ArrayList<Catalogo> listaRecibida ){
         
+        Scanner scan = new Scanner(System.in);
+        
         switch(dec){
         
             case 1:
                 
                 //Mostar 
+                int x = 0;
                 Cliente.mostrarProducto(listaRecibida);
+                System.out.println("¿Deseas comprar algo?\n1.-Si\t2.-No");
+                x = Integer.parseInt(scan.nextLine());
+                if( x == 1){
+                    
+                  Cliente.mostrarProducto(listaRecibida);
+                  System.out.println("Ingrese una opcion");
+                  x = Integer.parseInt(scan.nextLine());
+                    
+                }
                 
             break;
 
@@ -105,10 +118,19 @@ public class Cliente {
     
     private static void mostrarProducto( ArrayList<Catalogo> listaRecibida ){
         
-        for( Catalogo obj: listaRecibida ){
+        
+        for( int x = 0; x < listaRecibida.size(); x++ ){
             
-            obj.imprimirAtributos(obj);
-
+            if( listaRecibida.get(x).getCantidad() == 0){
+                
+                x--;
+            
+            }else{
+                
+                System.out.println( (x + 1) + ".- " + listaRecibida.get(x).getNombre() + " " + listaRecibida.get(x).getPrecio());
+            
+            }
+            
         }
         
     }
