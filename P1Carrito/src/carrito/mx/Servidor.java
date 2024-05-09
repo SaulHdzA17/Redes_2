@@ -32,8 +32,8 @@ public class Servidor {
                 pw.println(mensaje);//en este caso lo vamos a ligar al mensaje que escribimos en el Servidor para enviarlo y mostrarlo 
                 pw.flush();//en la consola del Cliente, limpiamos el flujo.
 
-                String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
-                //String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
+                //String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
+                String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
                 ArrayList <String> atributos = obtenerContenidoTxt(rutaArchivo);
                
                 for(int x = 0; x < atributos.size(); x++){
@@ -46,12 +46,12 @@ public class Servidor {
                     catalogo.add(producto);
 
                 }
-//
-//                for( Catalogo obj: catalogo ){
-//
-//                    Catalogo.imprimirAtributos(obj);
-//
-//                }
+
+                for( Catalogo obj: catalogo ){
+
+                    Catalogo.imprimirAtributos(obj);
+
+                }
                 
                 //Serializamos el array de objetos tipo catalogo
                 byte [] arg = Catalogo.serializarLista(catalogo);
