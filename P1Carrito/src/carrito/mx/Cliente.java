@@ -13,7 +13,7 @@ public class Cliente {
     
      public static void main(String[] args) {
          
-         ArrayList<Catalogo> listaRecibida;
+         ArrayList<Catalogo> listaRecibida = new ArrayList<>();
          ArrayList<Catalogo> carrito = new ArrayList<>();
          
          try {
@@ -28,20 +28,36 @@ public class Cliente {
             
             System.out.println("Bienvenido a la tiendita 5 peso");//
             
-            //Flujo de datos que entra con el array serialziado desde el Servidor:
-            InputStream inputStream = cl.getInputStream();
-            
-            //Leemos lsod atos serializados:
-            byte[] arg = inputStream.readAllBytes();
-            
-            // Deserializar los datos recibidos
-            listaRecibida = Catalogo.deserializarLista(arg);
+            try (//Flujo de datos que entra con el array serialziado desde el Servidor:
+                 InputStream inputStream = cl.getInputStream();){
+                
+                    //Leemos lsod atos serializados:
+                    byte[] arg = inputStream.readAllBytes();
+                    
+                    for( int x = 0; x < arg.length; x++ ){
 
-            for( Catalogo obj: listaRecibida ){
+                        System.out.println("arg [" + x + "] = " + arg[ x ] );
+
+                    }
+
+                    // Deserializar los datos recibidos
+                    listaRecibida = Catalogo.deserializarLista(arg);
+
+                    System.out.println(listaRecibida.isEmpty());
+
+                
+            } catch (Exception e) {
+                
+                System.out.println("No es posible cargar la serialización");
+                e.printStackTrace();
+
+            }
+
+            /*for( Catalogo obj: listaRecibida ){
 
                     obj.imprimirAtributos(obj);
 
-            }
+            }*/
             
 
             int dec = 0;
@@ -96,7 +112,7 @@ public class Cliente {
                 x = Integer.parseInt(scan.nextLine());
                 if (x == 1) {
 
-
+                    
                     
                 }
                 
@@ -146,6 +162,12 @@ public class Cliente {
             
         }
         
+    }
+
+    private static void quitarDelCarrito( ArrayList <Catalogo> carrito ){
+
+
+
     }
 
     private static void imprimirCarrito( ArrayList <Catalogo> carrito ){
@@ -199,13 +221,12 @@ public class Cliente {
 
             }else{
 
-                System.out.println("Elije una catidad adecuada");
+                System.out.println("Elija una catidad adecuada");
 
             }
 
         }while( !(cant <= listaRecibida.get(x).getCantidad()) );
         
-
 
     }
     
