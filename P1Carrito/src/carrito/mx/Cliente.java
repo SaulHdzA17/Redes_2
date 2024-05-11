@@ -2,10 +2,7 @@ package carrito.mx;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
-
-import javax.xml.catalog.Catalog;
 
 public class Cliente {
     
@@ -13,7 +10,7 @@ public class Cliente {
     
      public static void main(String[] args) {
          
-         ArrayList<Catalogo> listaRecibida = new ArrayList<>();
+         ArrayList<Catalogo> listaRecibida = null;
          ArrayList<Catalogo> carrito = new ArrayList<>();
          
          try {
@@ -28,31 +25,23 @@ public class Cliente {
             
             System.out.println("Bienvenido a la tiendita 5 peso");//
             
-            try (//Flujo de datos que entra con el array serialziado desde el Servidor:
-                 InputStream inputStream = cl.getInputStream();){
-                
-                    //Leemos lsod atos serializados:
-                    byte[] arg = inputStream.readAllBytes();
+            //Flujo de datos que entra con el array serialziado desde el Servidor:
+            InputStream inputStream = cl.getInputStream();
+
+            //Leemos los datos serializados:
+            byte[] arg = inputStream.readAllBytes();
                     
-                    for( int x = 0; x < arg.length; x++ ){
+            for( int x = 0; x < arg.length; x++ ){
 
-                        System.out.println("arg [" + x + "] = " + arg[ x ] );
-
-                    }
-
-                    // Deserializar los datos recibidos
-                    listaRecibida = Catalogo.deserializarLista(arg);
-
-                    System.out.println(listaRecibida.isEmpty());
-
-                
-            } catch (Exception e) {
-                
-                System.out.println("No es posible cargar la serialización");
-                e.printStackTrace();
+                System.out.println("arg [" + x + "] = " + arg[ x ] );
 
             }
 
+            // Deserializar los datos recibidos
+            listaRecibida = Catalogo.deserializarLista(arg);
+
+            System.out.println(listaRecibida.isEmpty());
+            
             /*for( Catalogo obj: listaRecibida ){
 
                     obj.imprimirAtributos(obj);
@@ -75,6 +64,7 @@ public class Cliente {
             }while(dec != 4);
             
 
+            inputStream.close();
             br1.close();
             cl.close();//Cerramos el socket cliente
         } catch(Exception e) {

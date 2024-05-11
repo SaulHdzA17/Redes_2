@@ -27,11 +27,7 @@ public class Servidor {
                 Socket cl = s.accept();//"s" acepta la conexión con accept() y devuelve un objeto Socket "cl" que representa la conexión
                 System.out.println("Conexion establecida desde: " + cl.getInetAddress() + ":" + cl.getPort());//Imprime la dirección IP y
                 //puerto del cliente que se ha conectado al servidor
-                String mensaje = "Conexión establecida al servidor";//Creamos el mensaje que enviaremos al cliente.
-                PrintWriter pw = new PrintWriter(new OutputStreamWriter(cl.getOutputStream()));//Usamos PrintWriter para un flujo de salida,
-                pw.println(mensaje);//en este caso lo vamos a ligar al mensaje que escribimos en el Servidor para enviarlo y mostrarlo 
-                pw.flush();//en la consola del Cliente, limpiamos el flujo.
-
+                
                 //String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
                 String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
                 ArrayList <String> atributos = obtenerContenidoTxt(rutaArchivo);
@@ -56,6 +52,11 @@ public class Servidor {
                 //Serializamos el array de objetos tipo catalogo
                 byte [] arg = Catalogo.serializarLista(catalogo);
                 
+                for( int x = 0; x < arg.length; x++ ){
+
+                    System.out.println("arg [" + x + "] = " + arg[ x ] );
+
+                }
                 
                 // Obtener flujo de salida del socket
                 OutputStream outputStream = cl.getOutputStream();
@@ -63,9 +64,7 @@ public class Servidor {
                 // Enviar los datos serializados al cliente
                 outputStream.write(arg);
                 outputStream.flush();
-                
-                
-                pw.close();//Cerramos el objeto pw.
+                                
                 cl.close();//Cerramos el socket del Cliente creado previamentex
             }//Cerramos bucle for
         } catch(Exception e) {
