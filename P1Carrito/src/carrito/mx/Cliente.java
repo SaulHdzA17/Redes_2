@@ -44,13 +44,10 @@ public class Cliente {
 
                     obj.imprimirAtributos(obj);
 
-            }*/
-            
-
+            }*/            
             int dec = 0;
 
             do{
-                
                 Cliente.limpiarCatalgo(listaRecibida);
                 
                 System.out.println("¿Que desea hacer?");
@@ -63,7 +60,6 @@ public class Cliente {
                 
             }while(dec != 4);
             
-
             inputStream.close();
             br1.close();
             cl.close();//Cerramos el socket cliente
@@ -72,65 +68,65 @@ public class Cliente {
         }
     }
      
-     
     private static void opcionesMenu( int dec, ArrayList<Catalogo> listaRecibida, ArrayList<Catalogo> carrito ){
                 
         int x = 0;
 
         switch(dec){
-        
             case 1:
-                
                 //Mostar 
                 Cliente.mostrarProducto(listaRecibida);
                 System.out.println("¿Deseas agregar algo al tu carrito?\n1.-Si\t2.-No");
                 x = scan.nextInt();
                 if( x == 1 ){
-
-                    Cliente.agregarAlCarrito(listaRecibida, carrito);
-                    
-                }
-                
+                    Cliente.agregarAlCarrito(listaRecibida, carrito); 
+                }   
             break;
-
             
             case 2:
-                
                 //Ver carrito
                 if ( Cliente.imprimirCarrito(carrito) ) {
                 
                     System.out.println("¿Quieres quitar algo del carrito?\n1.-Si\t2.-No");
                     x = scan.nextInt();
-                    if (x == 1) {
-
-                        
-                        
+                    if (x == 1) {                        
                     }
-
-                }
-
-                
-                
+                }                
             break;
 
             
             case 3:
-                
                 //Pagar
-                
+                 if (carrito.isEmpty()) {
+                    System.out.println("El carrito está vacío. No hay nada que pagar.");
+                } else {
+                    // Calcular el total de la compra
+                    double totalCompra = 0;
+                    for (Catalogo producto : carrito) {
+                        totalCompra += producto.getPrecio() * producto.getCantidad();
+                    }
+
+                    // Mostrar el total de la compra
+                    System.out.println("Total de la compra: $" + totalCompra);
+
+                    // Procesar la forma de pago (simplemente imprimir un mensaje de confirmación)
+                    System.out.println("¡Pago realizado con éxito! Gracias por su compra.");
+
+                    // Limpiar el carrito después de pagar
+                    carrito.clear();
+                }
             break;
 
             
-            case 4:
-                
+            case 4:                
                 //Salir
-                
-            break;
+                System.out.println("Saliendo...");
+                return; // Esto terminará el método opcionesMenu y, por lo tanto, el cliente saldrá del bucle do-while y finalizará su ejecución
 
             
             default:
-                
                 //Opcion no valida
+                System.out.println("Ingrese una opción valida, del 1 al 4");
                 
             break;
         
@@ -178,54 +174,51 @@ public class Cliente {
 
     }
 
-    private static void agregarAlCarrito( ArrayList <Catalogo> listaRecibida, ArrayList <Catalogo> carrito ){
+    private static void agregarAlCarrito(ArrayList<Catalogo> listaRecibida, ArrayList<Catalogo> carrito) {
+    Scanner scan = new Scanner(System.in);
+    mostrarProducto(listaRecibida);
+    System.out.println("Ingrese el número del producto que desea agregar al carrito:");
+    int opcion = scan.nextInt() - 1;
 
-        //Agregamos al carrito 
-
-        int x = 0, cant = 0;
-        
-        Cliente.mostrarProducto(listaRecibida);
-        
-        System.out.println("Ingrese una opcion");
-        x = scan.nextInt() - 1;
-        
-        //Verificamos que haya stock
-        System.out.println("¿Cuantos deseas agregar?");
-        cant = scan.nextInt();
-
-        System.out.println("Cantidad del producto = " + listaRecibida.get(x).getCantidad()
-                           + "\nx = " + x 
-                           + "\ncant = " + cant );
-
-        while( cant > listaRecibida.get(x).getCantidad() ){
-
-            System.out.println("Ingrese una cantida adecuada");
-            cant = scan.nextInt();
-
-        }
-        
-        if ( carrito.contains(listaRecibida.get(x)) == true ) {
-            
-            System.out.println("***************1*****************");
-            //Si se encuentra en el carrito, silo debemos de alter la cantidad
-            //Alteramos la catidad
-            carrito.get(carrito.indexOf(listaRecibida.get(x))).setCantidad( carrito.get(x).getCantidad() + cant );
-            //Por cada objeto en el carrito, se quita uno en el catalogo
-            listaRecibida.get(x).setCantidad( listaRecibida.get(x).getCantidad() - cant );
-
-        }else{
-
-            System.out.println("---------------2---------------");
-            //Si no se encuentra en el carrito tenemos que agregarlo y alterar cantidad
-            carrito.add(listaRecibida.get(x));//Primero agregamos el objeto al carrito y despues alteramos su cantidad
-            //Aletramos la cantidad
-            carrito.get( carrito.indexOf( listaRecibida.get(x) ) ).setCantidad(cant);
-            //Por cada objeto en el carrito, se quita uno en el catalogo
-            listaRecibida.get(x).setCantidad( listaRecibida.get(x).getCantidad() - cant );
-
-        }
-
+    if (opcion < 0 || opcion >= listaRecibida.size()) {
+        System.out.println("Opción inválida.");
+        return;
     }
+
+    Catalogo productoSeleccionado = listaRecibida.get(opcion);
+
+    System.out.println("Ingrese la cantidad que desea agregar:");
+    int cantidad = scan.nextInt();
+
+    if (cantidad <= 0 || cantidad > productoSeleccionado.getCantidad()) {
+        System.out.println("Cantidad inválida.");
+        return;
+    }
+
+    // Verificar si el producto ya está en el carrito
+    boolean encontrado = false;
+    for (Catalogo item : carrito) {
+        if (item.getNombre().equals(productoSeleccionado.getNombre())) {
+            // Actualizar la cantidad si ya está en el carrito
+            item.setCantidad(item.getCantidad() + cantidad);
+            encontrado = true;
+            break;
+        }
+    }
+
+    // Si el producto no está en el carrito, agregarlo
+    if (!encontrado) {
+        Catalogo nuevoProducto = new Catalogo(productoSeleccionado.getNombre(), cantidad, productoSeleccionado.getPrecio());
+        carrito.add(nuevoProducto);
+    }
+
+    // Actualizar la cantidad disponible en el catálogo
+    productoSeleccionado.setCantidad(productoSeleccionado.getCantidad() - cantidad);
+
+    // Limpia el catálogo después de agregar productos al carrito
+    limpiarCatalgo(listaRecibida);
+}
+
 
     public static void limpiarCatalgo( ArrayList <Catalogo> listaRecibida ){
 

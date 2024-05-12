@@ -20,21 +20,22 @@ public class Servidor {
             System.out.println("Puerto "+ scan +" ingresado");
             System.out.println("Validando conexion");
             
-            ServerSocket s = new ServerSocket(Integer.parseInt(scan));//Creamos un socket llamdo "s" y lo inicializamos con el valor del puerto, en este caso
-            System.out.println("Esperando cliente...");//6040 es el puerto, la creación del socket del server es dentro de un try catch
+            ServerSocket s = new ServerSocket(Integer.parseInt(scan));//Creamos un socket llamdo "s" y lo inicializamos con el valor del puerto, en este
+            System.out.println("Esperando cliente...");//caso 6040 es el puerto, la creación del socket del server es dentro de un try catch
             //Para la escucha del socket debemmos hacero dentro de un ciclo for infinito y espera la silicitud de conexión del cliente
             for(;;) {
                 Socket cl = s.accept();//"s" acepta la conexión con accept() y devuelve un objeto Socket "cl" que representa la conexión
                 System.out.println("Conexion establecida desde: " + cl.getInetAddress() + ":" + cl.getPort());//Imprime la dirección IP y
                 //puerto del cliente que se ha conectado al servidor
                 
-                //String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
-                String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
-                ArrayList <String> atributos = obtenerContenidoTxt(rutaArchivo);
-               
+                //Definimos las rutas dedonde va a tomar el Servidor el catalogo del producto y cargarlo
+                String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
+                //String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
+                ArrayList <String> atributos = obtenerContenidoTxt(rutaArchivo);//Creamos un array list de Strings que va a ir almacenando linea por
+               //linea cada elemento del array 
                 for(int x = 0; x < atributos.size(); x++){
                     
-                    //Apasamos toda la información del documento un objeto
+                    //Paasamos toda la información del documento un objeto
 
                     //System.out.println(atributos.get(x));
                     producto = Catalogo.obtnerAtributos(atributos.get(x));
