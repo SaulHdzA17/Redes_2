@@ -31,16 +31,14 @@ public class Cliente {
             //Leemos los datos serializados:
             byte[] arg = inputStream.readAllBytes();
                     
-            for( int x = 0; x < arg.length; x++ ){
+            /*for( int x = 0; x < arg.length; x++ ){
 
                 System.out.println("arg [" + x + "] = " + arg[ x ] );
 
-            }
+            }*/
 
             // Deserializar los datos recibidos
             listaRecibida = Catalogo.deserializarLista(arg);
-
-            System.out.println(listaRecibida.isEmpty());
             
             /*for( Catalogo obj: listaRecibida ){
 
@@ -52,6 +50,8 @@ public class Cliente {
             int dec = 0;
 
             do{
+                
+                Cliente.limpiarCatalgo(listaRecibida);
                 
                 System.out.println("¿Que desea hacer?");
                 System.out.println("1.-Mostar productos");
@@ -84,7 +84,7 @@ public class Cliente {
                 //Mostar 
                 Cliente.mostrarProducto(listaRecibida);
                 System.out.println("¿Deseas agregar algo al tu carrito?\n1.-Si\t2.-No");
-                x = Integer.parseInt(scan.nextLine());
+                x = scan.nextInt();
                 if( x == 1 ){
 
                     Cliente.agregarAlCarrito(listaRecibida, carrito);
@@ -97,14 +97,19 @@ public class Cliente {
             case 2:
                 
                 //Ver carrito
-                Cliente.imprimirCarrito(carrito);
-                System.out.println("¿Quieres quitar algo del carrito?\\n1.-Si\\t2.-No");
-                x = Integer.parseInt(scan.nextLine());
-                if (x == 1) {
+                if ( Cliente.imprimirCarrito(carrito) ) {
+                
+                    System.out.println("¿Quieres quitar algo del carrito?\n1.-Si\t2.-No");
+                    x = scan.nextInt();
+                    if (x == 1) {
 
-                    
-                    
+                        
+                        
+                    }
+
                 }
+
+                
                 
             break;
 
@@ -136,19 +141,9 @@ public class Cliente {
     private static void mostrarProducto( ArrayList<Catalogo> listaRecibida ){
         
         for( int x = 0; x < listaRecibida.size(); x++ ){
-            
-            if( listaRecibida.get(x).getCantidad() == 0){
-                
-                //Se limpia la lista de objetos que su cantida es 0
-                listaRecibida.remove(x);
-                x--;
-            
-            }else{
-                
-                System.out.println( (x + 1) + ".- " + listaRecibida.get(x).getNombre() + 
-                " " + listaRecibida.get(x).getCantidad() + " $" + listaRecibida.get(x).getPrecio());
-            
-            }
+        
+            System.out.println( (x + 1) + ".- " + listaRecibida.get(x).getNombre() + 
+            " " + listaRecibida.get(x).getCantidad() + " $" + listaRecibida.get(x).getPrecio());
             
         }
         
@@ -160,13 +155,15 @@ public class Cliente {
 
     }
 
-    private static void imprimirCarrito( ArrayList <Catalogo> carrito ){
+    private static boolean imprimirCarrito( ArrayList <Catalogo> carrito ){
 
         int x = 0;
         if (carrito.isEmpty()) {
 
             System.out.println("No se a agregado nada al carrito");
             
+            return false;
+
         }else{
 
             for( x = 0; x < carrito.size(); x++ ){
@@ -176,6 +173,7 @@ public class Cliente {
             
             }
 
+            return true;
         }
 
     }
@@ -185,38 +183,61 @@ public class Cliente {
         //Agregamos al carrito 
 
         int x = 0, cant = 0;
-        Cliente.mostrarProducto(listaRecibida);
-        System.out.println("Ingrese una opcion");
-        x = Integer.parseInt(scan.nextLine());
         
-        carrito.add(listaRecibida.get(x));//Primero agregamos el objeto al carrito y despues alteramos su cantidad
+        Cliente.mostrarProducto(listaRecibida);
+        
+        System.out.println("Ingrese una opcion");
+        x = scan.nextInt() - 1;
+        
+        //Verificamos que haya stock
+        System.out.println("¿Cuantos deseas agregar?");
+        cant = scan.nextInt();
 
-        do{
+        System.out.println("Cantidad del producto = " + listaRecibida.get(x).getCantidad()
+                           + "\nx = " + x 
+                           + "\ncant = " + cant );
 
-            System.out.println("¿Cuantos deseas agregar?");
-            cant = Integer.parseInt(scan.nextLine());
+        while( cant > listaRecibida.get(x).getCantidad() ){
+
+            System.out.println("Ingrese una cantida adecuada");
+            cant = scan.nextInt();
+
+        }
+        
+        if ( carrito.contains(listaRecibida.get(x)) == true ) {
             
-            //Comprovamos que haya stock
-            if ( cant <= listaRecibida.get(x).getCantidad() ) {
+            System.out.println("***************1*****************");
+            //Si se encuentra en el carrito, silo debemos de alter la cantidad
+            //Alteramos la catidad
+            carrito.get(carrito.indexOf(listaRecibida.get(x))).setCantidad( carrito.get(x).getCantidad() + cant );
+            //Por cada objeto en el carrito, se quita uno en el catalogo
+            listaRecibida.get(x).setCantidad( listaRecibida.get(x).getCantidad() - cant );
+
+        }else{
+
+            System.out.println("---------------2---------------");
+            //Si no se encuentra en el carrito tenemos que agregarlo y alterar cantidad
+            carrito.add(listaRecibida.get(x));//Primero agregamos el objeto al carrito y despues alteramos su cantidad
+            //Aletramos la cantidad
+            carrito.get( carrito.indexOf( listaRecibida.get(x) ) ).setCantidad(cant);
+            //Por cada objeto en el carrito, se quita uno en el catalogo
+            listaRecibida.get(x).setCantidad( listaRecibida.get(x).getCantidad() - cant );
+
+        }
+
+    }
+
+    public static void limpiarCatalgo( ArrayList <Catalogo> listaRecibida ){
+
+        for( int x = 0; x < listaRecibida.size(); x++ ){
+
+            if( listaRecibida.get(x).getCantidad() == 0 ){
                 
-                //Si hay suficiente, agregamos al carrito
-                for( int j = 0; j < cant; j++ ){
-
-                    //Alteramos la catidad
-                    carrito.get(carrito.indexOf(listaRecibida.get(x))).setCantidad( j + 1);
-                    //Por cada objeto en el carrito, se quita uno en el catalogo
-                    listaRecibida.get(x).setCantidad( listaRecibida.get(x).getCantidad() - 1 );
-
-                }
-
-            }else{
-
-                System.out.println("Elija una catidad adecuada");
+                listaRecibida.remove(x);
 
             }
 
-        }while( !(cant <= listaRecibida.get(x).getCantidad()) );
-        
+        }
 
     }
     

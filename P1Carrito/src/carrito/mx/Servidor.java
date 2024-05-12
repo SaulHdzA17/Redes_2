@@ -43,20 +43,20 @@ public class Servidor {
 
                 }
 
-                for( Catalogo obj: catalogo ){
+                /*for( Catalogo obj: catalogo ){
 
                     Catalogo.imprimirAtributos(obj);
 
-                }
+                }*/
                 
                 //Serializamos el array de objetos tipo catalogo
                 byte [] arg = Catalogo.serializarLista(catalogo);
                 
-                for( int x = 0; x < arg.length; x++ ){
+                /*for( int x = 0; x < arg.length; x++ ){
 
                     System.out.println("arg [" + x + "] = " + arg[ x ] );
 
-                }
+                }*/
                 
                 // Obtener flujo de salida del socket
                 OutputStream outputStream = cl.getOutputStream();
