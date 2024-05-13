@@ -65,7 +65,20 @@ public class Servidor {
                 // Enviar los datos serializados al cliente
                 outputStream.write(arg);
                 outputStream.flush();
-                                
+                
+                //Flujo de datos que entra con el catalogo actualizado
+                InputStream inputStream = cl.getInputStream();
+
+                //Leemos los datos serializados:
+                arg = inputStream.readAllBytes();
+                
+                //Limpia los elementos del angtiguo catalogo y va a reescribir los datos actualizados
+                catalogo.clear();
+                catalogo = Catalogo.deserializarLista(arg);
+                Servidor.guardadArchivo(rutaArchivo, catalogo);
+                
+                outputStream.close();
+                inputStream.close();
                 cl.close();//Cerramos el socket del Cliente creado previamentex
             }//Cerramos bucle for
         } catch(Exception e) {
@@ -95,6 +108,29 @@ public class Servidor {
 
         return arg;
          
+    }
+    
+    public static void guardadArchivo ( String rutaArchivo, ArrayList <Catalogo> carrito ){
+        
+         try {
+            // Abre el archivo en modo de escritura
+            FileWriter writer = new FileWriter(rutaArchivo);
+            
+            // Sobrescribe el archivo con un archivo vacío
+            writer.write("");
+            
+            
+            for( Catalogo obj: carrito )
+                writer.write( obj.getNombre() + "," + obj.getCantidad() + "," + obj.getPrecio() + " " );
+            
+            // Cierra el escritor
+            writer.close();
+            
+            System.out.println("Contenido del archivo limpiado correctamente.");
+        } catch (IOException e) {
+            System.out.println("Error al limpiar el archivo: " + e.getMessage());
+        }
+        
     }
     
     
