@@ -98,14 +98,20 @@ public class Cliente {
                 
                     System.out.println("¿Quieres quitar algo del carrito?\n1.-Si\t2.-No");
                     x = scan.nextInt();
-                    if (x == 1) {                        
+                    if (x == 1) {  
+                        
+                        Cliente.quitarDelCarrito( listaRecibida, carrito);
+                        
                     }
-                }                
+                }
+                
             break;
 
             
             case 3:
                 //Pagar
+                generarPDF(carrito);
+                
                  if (carrito.isEmpty()) {
                     System.out.println("El carrito está vacío. No hay nada que pagar.");
                 } else {
@@ -123,6 +129,7 @@ public class Cliente {
 
                     // Limpiar el carrito después de pagar
                     carrito.clear();
+                    
                 }
             break;
 
@@ -154,9 +161,28 @@ public class Cliente {
         
     }
 
-    private static void quitarDelCarrito( ArrayList <Catalogo> carrito ){
+    private static void quitarDelCarrito( ArrayList<Catalogo> listaRecibida, ArrayList <Catalogo> carrito ){
 
-
+        Cliente.imprimirCarrito(carrito);
+        System.out.println("Seleccione el producto a omitir del carrito");
+        int opcion = scan.nextInt() - 1;
+        int indiceLista = 0;
+        
+        for( int x = 0; x < listaRecibida.size(); x++ ){
+            
+            if( carrito.get(opcion).getNombre().equals( listaRecibida.get(x).getNombre() ) ){
+                 
+                indiceLista = x;
+                break;
+                
+            }
+            
+        }
+        
+        listaRecibida.get(indiceLista).setCantidad( listaRecibida.get(indiceLista).getCantidad() + carrito.get(opcion).getCantidad() );
+        carrito.remove(opcion);
+        
+        Cliente.imprimirCarrito(carrito);
 
     }
 
