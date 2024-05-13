@@ -4,6 +4,15 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.itextpdf.kernel.pdf.*;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 public class Cliente {
     
     static Scanner scan = new Scanner(System.in);
@@ -232,6 +241,59 @@ public class Cliente {
 
         }
 
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    private static void generarPDF(ArrayList<Catalogo> carrito) {
+        try {
+            // Crear un nuevo documento PDF
+            PdfWriter writer = new PdfWriter("carrito_compra.pdf");
+            PdfDocument pdf = new PdfDocument(writer);
+            Document document = new Document(pdf);
+            
+            // Agregar título
+            document.add(new Paragraph("Carrito de Compra"));
+            
+            // Agregar lista de productos del carrito
+            document.add(new Paragraph("Lista de Productos:"));
+            for (Catalogo producto : carrito) {
+                String descripcion = producto.getNombre() + " - Cantidad: " + producto.getCantidad() + " - Precio unitario: $" + producto.getPrecio();
+                document.add(new Paragraph(descripcion));
+            }
+            
+            // Calcular total a pagar
+            double total = 0;
+            for (Catalogo producto : carrito) {
+                total += producto.getCantidad() * producto.getPrecio();
+            }
+            
+            // Agregar total a pagar
+            document.add(new Paragraph("Total a Pagar: $" + total));
+            
+            // Obtener fecha y hora actual
+            LocalDateTime now = LocalDateTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+            String fechaHora = now.format(formatter);
+            
+            // Agregar fecha y hora
+            document.add(new Paragraph("Fecha y Hora: " + fechaHora));
+            
+            // Cerrar documento
+            document.close();
+            
+            System.out.println("PDF generado correctamente.");
+        } catch (IOException e) {
+            System.out.println("Error al generar el PDF: " + e.getMessage());
+        }
     }
     
 }
