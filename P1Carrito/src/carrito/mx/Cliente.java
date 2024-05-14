@@ -7,8 +7,7 @@ import java.util.Scanner;
 import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
-import java.io.File;
-import java.io.IOException;
+
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -77,6 +76,7 @@ public class Cliente {
             outputStream.flush();
             
             outputStream.close();
+
             inputStream.close();
             br1.close();
             cl.close();//Cerramos el socket cliente
@@ -118,7 +118,7 @@ public class Cliente {
             
             case 3:
                 //Pagar
-                //generarPDF(carrito);
+                generarPDF(carrito);
                 
                  if (carrito.isEmpty()) {
                     System.out.println("El carrito está vacío. No hay nada que pagar.");
