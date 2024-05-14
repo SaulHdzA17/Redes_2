@@ -60,15 +60,15 @@ public class Servidor {
                 
                 
                 //Evitar cerrar el proceso:
-                
+                serverSocket.close();
             }
         }
 
     } catch (Exception e) {
         e.printStackTrace();
-    } finally {
-        sc.close();
     }
+        
+    
 }
  
     
