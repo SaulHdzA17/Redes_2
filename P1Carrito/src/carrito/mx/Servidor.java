@@ -7,11 +7,11 @@ import java.util.Scanner;
 public class Servidor {
 
 
-    public static void main(String[] args) {
-    String scan = new String();
+public static void main(String[] args) {
+    String scan;
     Scanner sc = new Scanner(System.in);
-    Catalogo producto = new Catalogo();
-    ArrayList<Catalogo> catalogo = new ArrayList<>();
+    Catalogo producto;
+    ArrayList<Catalogo> catalogo;
 
     try {
         System.out.println("*****Iniciando servidor*****");
@@ -20,44 +20,48 @@ public class Servidor {
         System.out.println("Puerto " + scan + " ingresado");
         System.out.println("Validando conexión");
 
-        ServerSocket s = new ServerSocket(Integer.parseInt(scan));
-        System.out.println("Esperando cliente...");
+        try (ServerSocket serverSocket = new ServerSocket(Integer.parseInt(scan))) {
+            System.out.println("Esperando cliente...");
 
-        // Mantener el servidor en un bucle infinito para recibir múltiples conexiones de clientes
-        while (true) {
-            Socket cl = s.accept();
-            System.out.println("Conexion establecida desde: " + cl.getInetAddress() + ":" + cl.getPort());
+            // Mantener el servidor en un bucle infinito para recibir múltiples conexiones de clientes
+            while (true) {
+                try (Socket cl = serverSocket.accept()) {
+                    System.out.println("Conexion establecida desde: " + cl.getInetAddress() + ":" + cl.getPort());
 
-            String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
-            ArrayList<String> atributos = obtenerContenidoTxt(rutaArchivo);
+                    String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
+                    ArrayList<String> atributos = Servidor.obtenerContenidoTxt(rutaArchivo);
 
-            for (int x = 0; x < atributos.size(); x++) {
-                producto = Catalogo.obtenerAtributos(atributos.get(x));
-                catalogo.add(producto);
+                    catalogo = new ArrayList<>();
+                    for (String atributo : atributos) {
+                        producto = Catalogo.obtenerAtributos(atributo);
+                        catalogo.add(producto);
+                    }
+
+                    byte[] arg = Catalogo.serializarLista(catalogo);
+
+                    // Obtener flujo de salida del socket y enviar los datos serializados al cliente
+                    try (OutputStream outputStream = cl.getOutputStream()) {
+                        outputStream.write(arg);
+                        outputStream.flush();
+                    }
+
+                    // Esperar a que el cliente envíe los datos actualizados
+                    try (InputStream inputStream = cl.getInputStream()) {
+                        arg = inputStream.readAllBytes();
+                    }
+
+                    // Limpiar y actualizar el catálogo
+                    catalogo.clear();
+                    catalogo = Catalogo.deserializarLista(arg);
+                    Servidor.guardarArchivo(rutaArchivo, catalogo);
+                }
             }
-
-            byte[] arg = Catalogo.serializarLista(catalogo);
-
-            // Obtener flujo de salida del socket y enviar los datos serializados al cliente
-            OutputStream outputStream = cl.getOutputStream();
-            outputStream.write(arg);
-            outputStream.flush();
-
-            // Esperar a que el cliente envíe los datos actualizados
-            InputStream inputStream = cl.getInputStream();
-            arg = inputStream.readAllBytes();
-
-            // Limpiar y actualizar el catálogo
-            catalogo.clear();
-            catalogo = Catalogo.deserializarLista(arg);
-            Servidor.guardarArchivo(rutaArchivo, catalogo);
-            // Cerrar flujos y sockets
-            outputStream.close();
-            inputStream.close();
-            cl.close();
         }
+
     } catch (Exception e) {
         e.printStackTrace();
+    } finally {
+        sc.close();
     }
 }
 
