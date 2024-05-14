@@ -16,75 +16,62 @@ public class Cliente {
     
     static Scanner scan = new Scanner(System.in);
     
-     public static void main(String[] args) {
-         
-         ArrayList<Catalogo> listaRecibida = null;
-         ArrayList<Catalogo> carrito = new ArrayList<>();
-         
-         try {
-            
-            BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));//Creamos un objeto BufferedReader para poder leer 
-            //la entrada que nos de el usuario desde la consola, alternativa a scanner.
-            System.out.println("Escriba la direccion del servidor: ");//Proporcionamos la dirección IP o el nombre del servidor, debe ser la 
-            String host = br1.readLine();//dirección en donde se está ejecutando el programa del Servidor, en est caso localhost
-            System.out.println("Escriba el puerto: ");//Escribimos el puerto al que deseamos ingresar desde la entrada estandar como la entrada
-            int pto = Integer.parseInt(br1.readLine());//anterior, en este caso 1234 es el puerto que está escuchando el servidor
-            Socket cl = new Socket(host, pto);//Creamos un objeto Socket llamado "cl" que vamos a conectar al servidor especificado por la 
-            
-            System.out.println("Bienvenido a la tiendita 5 peso");//
-            
-            //Flujo de datos que entra con el array serialziado desde el Servidor:
+    public static void main(String[] args) {
+        ArrayList<Catalogo> listaRecibida = null;
+        ArrayList<Catalogo> carrito = new ArrayList<>();
+    
+        try {
+            BufferedReader br1 = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Escriba la dirección del servidor:");
+            String host = br1.readLine();
+            System.out.println("Escriba el puerto:");
+            int pto = Integer.parseInt(br1.readLine());
+            Socket cl = new Socket(host, pto);
+    
+            System.out.println("Bienvenido a la tiendita 5 peso");
+    
+            // Flujo de datos que entra con el array serialziado desde el Servidor:
             InputStream inputStream = cl.getInputStream();
-
-            //Leemos los datos serializados:
             byte[] arg = inputStream.readAllBytes();
-                    
-            /*for( int x = 0; x < arg.length; x++ ){
-
-                System.out.println("arg [" + x + "] = " + arg[ x ] );
-
-            }*/
-
+    
             // Deserializar los datos recibidos
             listaRecibida = Catalogo.deserializarLista(arg);
-            
-            /*for( Catalogo obj: listaRecibida ){
-
-                    obj.imprimirAtributos(obj);
-
-            }*/            
+    
             int dec = 0;
-
-            do{
-                Cliente.limpiarCatalgo(listaRecibida);
-                
-                System.out.println("¿Que desea hacer?");
-                System.out.println("1.-Mostar productos");
-                System.out.println("2.-Ver Carrito de compras");
-                System.out.println("3.-Pagar");
-                System.out.println("4.-Salir");
+            do {
+                Cliente.limpiarCatalogo(listaRecibida);
+    
+                System.out.println("¿Qué desea hacer?");
+                System.out.println("1.- Mostrar productos");
+                System.out.println("2.- Ver Carrito de compras");
+                System.out.println("3.- Pagar");
+                System.out.println("4.- Salir");
                 dec = Integer.parseInt(br1.readLine());
-                Cliente.opcionesMenu(dec, listaRecibida, carrito);
-                
-            }while(dec != 4);
-            
-            arg = Catalogo.serializarLista(listaRecibida);
-            
-            OutputStream outputStream = cl.getOutputStream();
-            
-            outputStream.write(arg);
-            outputStream.flush();
-            
-            outputStream.close();
-
+                opcionesMenu(dec, listaRecibida, carrito);
+    
+                // Serializar y enviar los datos actualizados al servidor después de cada acción del usuario
+                arg = Catalogo.serializarLista(listaRecibida);
+                OutputStream outputStream = cl.getOutputStream();
+                outputStream.write(arg);
+                outputStream.flush();
+                outputStream.close();
+    
+                // Esperar datos actualizados del servidor (opcional)
+                inputStream = cl.getInputStream();
+                arg = inputStream.readAllBytes();
+    
+            } while (dec != 4);
+    
+            // Cerrar flujos y sockets
             inputStream.close();
             br1.close();
-            cl.close();//Cerramos el socket cliente
-        } catch(Exception e) {
+            cl.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
      
+
     private static void opcionesMenu( int dec, ArrayList<Catalogo> listaRecibida, ArrayList<Catalogo> carrito ){
                 
         int x = 0;
@@ -263,7 +250,7 @@ public class Cliente {
 }
 
 
-    public static void limpiarCatalgo( ArrayList <Catalogo> listaRecibida ){
+    public static void limpiarCatalogo( ArrayList <Catalogo> listaRecibida ){
 
         for( int x = 0; x < listaRecibida.size(); x++ ){
 
