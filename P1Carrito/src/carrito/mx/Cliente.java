@@ -69,6 +69,14 @@ public class Cliente {
                 
             }while(dec != 4);
             
+            arg = Catalogo.serializarLista(listaRecibida);
+            
+            OutputStream outputStream = cl.getOutputStream();
+            
+            outputStream.write(arg);
+            outputStream.flush();
+            
+            outputStream.close();
             inputStream.close();
             br1.close();
             cl.close();//Cerramos el socket cliente
@@ -110,7 +118,7 @@ public class Cliente {
             
             case 3:
                 //Pagar
-                generarPDF(carrito);
+                //generarPDF(carrito);
                 
                  if (carrito.isEmpty()) {
                     System.out.println("El carrito está vacío. No hay nada que pagar.");
