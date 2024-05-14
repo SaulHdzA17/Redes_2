@@ -131,9 +131,10 @@ public class Cliente {
 
             
             case 4:                
-                //Salir
+                // Salir
                 System.out.println("Saliendo...");
-                return; // Esto terminará el método opcionesMenu y, por lo tanto, el cliente saldrá del bucle do-while y finalizará su ejecución
+
+                return; // Esto terminará la ejecución del cliente
 
             
             default:

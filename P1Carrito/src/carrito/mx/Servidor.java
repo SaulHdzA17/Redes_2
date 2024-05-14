@@ -26,8 +26,9 @@ public class Servidor {
             while (true) {
                 try (Socket cl = serverSocket.accept()) {
                     System.out.println("Conexion establecida desde: " + cl.getInetAddress() + ":" + cl.getPort());
-
-                    String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
+                    
+                    String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
+                    //String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
                     ArrayList<String> atributos = Servidor.obtenerContenidoTxt(rutaArchivo);
 
                     catalogo = new ArrayList<>();
@@ -54,6 +55,12 @@ public class Servidor {
                     catalogo = Catalogo.deserializarLista(arg);
                     Servidor.guardadArchivo(rutaArchivo, catalogo);
                 }
+                
+                
+                
+                
+                //Evitar cerrar el proceso:
+                
             }
         }
 
