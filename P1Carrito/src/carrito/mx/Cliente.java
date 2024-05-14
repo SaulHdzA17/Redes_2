@@ -49,19 +49,20 @@ public class Cliente {
                 dec = Integer.parseInt(br1.readLine());
                 opcionesMenu(dec, listaRecibida, carrito);
     
-                // Serializar y enviar los datos actualizados al servidor después de cada acción del usuario
-                arg = Catalogo.serializarLista(listaRecibida);
-                OutputStream outputStream = cl.getOutputStream();
-                outputStream.write(arg);
-                outputStream.flush();
-                outputStream.close();
-    
-                // Esperar datos actualizados del servidor (opcional)
-                inputStream = cl.getInputStream();
-                arg = inputStream.readAllBytes();
-    
             } while (dec != 4);
     
+            
+            // Serializar y enviar los datos actualizados al servidor después de cada acción del usuario
+            arg = Catalogo.serializarLista(listaRecibida);
+            OutputStream outputStream = cl.getOutputStream();
+            outputStream.write(arg);
+            outputStream.flush();
+            outputStream.close();
+
+            // Esperar datos actualizados del servidor (opcional)
+            inputStream = cl.getInputStream();
+            arg = inputStream.readAllBytes();
+            
             // Cerrar flujos y sockets
             inputStream.close();
             br1.close();
@@ -246,7 +247,7 @@ public class Cliente {
     productoSeleccionado.setCantidad(productoSeleccionado.getCantidad() - cantidad);
 
     // Limpia el catálogo después de agregar productos al carrito
-    limpiarCatalgo(listaRecibida);
+    Cliente.limpiarCatalogo(listaRecibida);
 }
 
 
