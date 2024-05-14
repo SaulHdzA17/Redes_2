@@ -47,7 +47,7 @@ public class Catalogo implements Serializable{
     }
     
     //Método para ir reconociendo los elementos del archivo y obtenernlos como atributos del objeto:
-    public static Catalogo obtnerAtributos(String cadenaArchivo) {
+    public static Catalogo obtenerAtributos(String cadenaArchivo) {
         
         String nombre = "";
         int catidad = 0;
