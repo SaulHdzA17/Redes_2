@@ -17,7 +17,7 @@ public class Cliente {
     
     static Scanner scan = new Scanner(System.in);
     
-     public static void main(String[] args) {
+    public static void main(String[] args) {
          
          ArrayList<Catalogo> listaRecibida = null;
          ArrayList<Catalogo> carrito = new ArrayList<>();
@@ -77,6 +77,7 @@ public class Cliente {
             outputStream.flush();
             
             outputStream.close();
+
             inputStream.close();
             br1.close();
             cl.close();//Cerramos el socket cliente
