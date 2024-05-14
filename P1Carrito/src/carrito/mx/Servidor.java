@@ -29,7 +29,7 @@ public class Servidor {
     
                 String rutaArchivo = "C:\\Users\\raygu\\OneDrive\\Desktop\\Redes2\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
                 //String rutaArchivo = "C:\\Users\\dra55\\Documents\\GitHub\\Redes_2\\P1Carrito\\src\\carrito\\archivos\\productos.txt";
-                ArrayList<String> atributos = obtenerContenidoTxt(rutaArchivo);
+                ArrayList<String> atributos = Servidor.obtenerContenidoTxt(rutaArchivo);
     
                 for (int x = 0; x < atributos.size(); x++) {
                     producto = Catalogo.obtnerAtributos(atributos.get(x));
